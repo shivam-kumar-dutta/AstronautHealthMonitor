@@ -1,0 +1,10 @@
+{
+"astronaut_id": "AST-001",
+"timestamp": "2026-10-21T09:00:00Z",
+"vitals": {
+"heart_rate": 85,
+"spo2": 98,
+"temperature": 37.2
+},
+"sleep_hours": 6.5
+}
