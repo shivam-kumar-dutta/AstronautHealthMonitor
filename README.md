@@ -1,49 +1,103 @@
-# Astronaut Health Monitor
+# ⎈ ORBIT — Astronaut Health Monitor
 
-A lightweight, browser-based dashboard concept for viewing an astronaut's health and wellness indicators during a space mission. The interface displays sample telemetry for heart rate, blood oxygen, body temperature, blood pressure, sleep duration, and radiation exposure.
+> **NASA Space Apps Challenge 2026 Submission**  
+> *A lightweight, real-time physiological telemetry dashboard for crew wellness and microgravity vital analysis.*
 
-> **Demo only:** The dashboard uses hard-coded sample values. It is not connected to live sensors or medical systems, and it must not be used for diagnosis or treatment.
+---
 
-## Features
+## 🚀 Overview
 
-- Mission overview with crew member and mission details
-- Health indicator cards rendered dynamically with JavaScript
-- Status badges for normal, monitor, and alert ranges
-- Baseline guidance and simple SVG sparklines for each indicator
-- Responsive styling with a dark, space-inspired visual design
+**ORBIT** is a telemetry-driven web application designed to monitor astronaut health indicators during long-duration space missions (e.g., ISS, Lunar Habitat, or Mars transit). 
 
-## Project structure
+In extreme mission environments, physical microgravity stressors, fluid shifts, radiation exposure, and isolation pose continuous risks to crew members. **ORBIT** aggregates physiological telemetry data into a streamlined visual dashboard, enabling astronauts and ground control flight surgeons to monitor vitals, detect drift outside baseline thresholds early, and act on targeted recovery advisories.
+
+---
+
+## ✨ Key Features
+
+- **Crew Wellness Score:** Dynamically evaluates overall health readiness based on multi-indicator baseline metrics.
+- **Biometric Telemetry Cards:** Real-time visualization for critical health metrics:
+  - Heart Rate (`bpm`)
+  - Blood Oxygen / SpO2 (`%`)
+  - Body Temperature (`°C`)
+  - Systolic / Diastolic Blood Pressure (`mmHg`)
+  - Sleep Duration (`hours`)
+  - Radiation Exposure (`mSv`)
+- **Automated Threshold Evaluation:** Categorizes each reading as `Normal`, `Watch / Monitor`, or `Alert` based on safe spaceflight thresholds.
+- **Sparkline Visualizations:** Pure SVG mini-charts demonstrating temporal trends without heavy external libraries.
+- **Interactive Telemetry Testing:** Allows manual vital updates directly from the dashboard to simulate telemetry drift and threshold triggers in real time.
+- **Targeted Action Advisories:** Automatically suggests contextual medical guidelines when vitals drift out of nominal ranges.
+
+---
+
+## 🛠️ Architecture & Tech Stack
+
+Designed from the ground up as a **zero-dependency, lightweight web system**, ensuring low memory overhead, high reliability, and fast performance.
+
+- **Backend / Server:** Node.js (Built using native `http`, `fs`, and `path` modules)
+- **Data Layer:** Structured JSON telemetry payloads (`data.json`)
+- **Frontend UI:** HTML5 (`index.html`) & Modern CSS3 (`style.css`) utilizing CSS Grid and Flexbox layouts
+- **Logic & DOM Parsing:** Vanilla JavaScript (`script.js`) using asynchronous `fetch()` API calls
+
+---
+
+## 📁 Repository Structure
 
 ```text
-.
-├── app.js                     # Small console-based sample telemetry example
-├── data/
-│   └── astronaut.json         # Sample astronaut telemetry data
-└── astronaut.html/
-    ├── index.html             # Dashboard page
-    ├── script..js             # Sample indicator data and card rendering
-    └── style.css              # Dashboard styles
+orbit-health-monitor/
+├── server.js          # Node.js local web server & API routing
+├── index.html         # Main dashboard layout structure
+├── style.css          # Aerospace light UI theme & responsive styling
+├── script.js          # Telemetry fetching, evaluation logic & DOM builder
+├── data.json          # Simulated astronaut biometric telemetry payload
+└── README.md          # Project documentation & mission summary
 ```
 
-## Run locally
+---
 
-No build step or package installation is required. Clone or download the repository, then open `astronaut.html/index.html` in a modern web browser. The page loads its styles and JavaScript from the same directory.
+## ⚡ Quick Start & Installation
 
-Alternatively, serve the repository with any static file server and visit `/astronaut.html/`.
+### Prerequisites
+Make sure you have [Node.js](https://nodejs.org/) (version 14 or higher) installed on your system.
 
-## Sample data
+### Running the Application
 
-The dashboard currently uses illustrative values defined in `astronaut.html/script..js`. The separate `data/astronaut.json` file and root-level `app.js` are also sample telemetry examples; the dashboard does not currently fetch or read that JSON file.
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/your-username/orbit-health-monitor.git
+   cd orbit-health-monitor
+   ```
 
-Indicator status ranges are configured in the dashboard script. Update those values and the sample readings there to change what the cards display. These thresholds are for demonstrating the interface only and are not medical guidance.
+2. **Start the Node.js server:**
+   ```bash
+   node server.js
+   ```
 
-## Technologies
+3. **Launch the dashboard:**
+   Open your browser and navigate to:
+   ```text
+   http://localhost:3000
+   ```
 
-- HTML
-- CSS
-- Vanilla JavaScript
-- Inline SVG sparklines
+---
 
-## License
+## 🔬 How It Works
 
-No license is currently specified. Contact the repository owner before using or redistributing this project.
+1. **Data Ingestion:** `server.js` serves static assets and exposes the `/api/data` endpoint delivering structured telemetry from `data.json`.
+2. **Status Determination:** The frontend script evaluates each metric against physiological normal and watch ranges:
+   $$\text{Status} = \begin{cases} \text{Normal} & \text{if } V \in [\text{min}_{\text{normal}}, \text{max}_{\text{normal}}] \\ \text{Watch} & \text{if } V \in [\text{min}_{\text{watch}}, \text{max}_{\text{watch}}] \\ \text{Alert} & \text{otherwise} \end{cases}$$
+3. **Dynamic UI Rendering:** The system constructs biometric cards, applies visual status badges, plots trend sparklines, and updates the aggregate wellness score dynamically without full page reloads.
+
+---
+
+## 🛰️ Future Roadmap
+
+- [ ] Real-time WebSocket streaming for continuous sensor telemetry input.
+- [ ] Multi-crew selector interface for Mission Control ground staff.
+- [ ] Historical telemetry logging backed by persistent SQLite database storage.
+- [ ] Integration with wearable physiological hardware (e.g., smart garments, ECG straps).
+
+---
+
+## 📜 Disclaimer
+*This project is a hackathon prototype developed for the NASA Space Apps Challenge 2026. It is intended for demonstration purposes and is not a certified medical diagnostic system.*
