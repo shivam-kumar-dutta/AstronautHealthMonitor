@@ -1,86 +1,73 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Orbit - Astronaut Health Monitor</title>
-  
-  <!-- Google Fonts -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="AstroVitals: onboard crew health monitor. Enter readings, get status, alerts and trends.">
+  <title>AstroVitals</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-  <!-- Link to your separate CSS file -->
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <div class="container">
-    <!-- TOP NAVIGATION -->
-    <nav>
-      <div class="logo">⎈ orbit</div>
-      <div class="nav-links">
-        <span class="active">Overview</span>
-        <span>Health indicators</span>
-        <span>Alerts</span>
-      </div>
-    </nav>
-
-    <!-- HEADER / HERO SECTION -->
-    <div class="header-grid">
-      <div class="hero-text">
-        <p class="section-title">01 / MISSION OVERVIEW</p>
-        <h1>Far from Earth.<br>Closer to your health.</h1>
-        <p>Your wellbeing, in orbit. A real-time view of signals that matter.</p>
-        <div class="sync-badge">
-          <div class="sync-dot"></div> Live telemetry &bull; Synced 4 seconds ago
-        </div>
-      </div>
-
-      <!-- CREW WELLNESS SCORE -->
-      <div class="wellness-card">
-        <div class="wellness-info">
-          <h3>Crew Wellness</h3>
-          <h2>Ready for what's next.</h2>
-          <p>Key vitals are in range.</p>
-        </div>
-        <div class="score-circle">
-          <div class="score-inner">
-            <span class="score-value">98</span>
-            <span class="score-max">/ 100</span>
-          </div>
-        </div>
+<div class="app">
+  <header class="top">
+    <div class="brand">
+      <span class="mark" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2.5-6 4 12 2.5-6H21"/></svg>
+      </span>
+      <div>
+        <h1>AstroVitals</h1>
+        <p>Onboard crew health monitor. Enter readings, get status, alerts and trends.</p>
       </div>
     </div>
+    <div class="mission" id="missionStats"></div>
+  </header>
 
-    <!-- MISSION INFO BAR -->
-    <div class="info-bar">
-      <div class="info-item">
-        <span class="info-label">Crew Member</span>
-        <span class="info-value" id="astronaut-name">Alex Morgan</span>
-      </div>
-      <div class="info-item">
-        <span class="info-label">Mission Day</span>
-        <span class="info-value">142</span>
-      </div>
-      <div class="info-item">
-        <span class="info-label">Location</span>
-        <span class="info-value">ISS &bull; Harmony module</span>
-      </div>
-      <div class="info-item">
-        <span class="info-label">Local Mission Time</span>
-        <span class="info-value">14:32:08 UTC</span>
-      </div>
-    </div>
+  <div class="shell">
+    <aside class="rail">
+      <section>
+        <div class="label">Crew</div>
+        <div class="crewlist" id="crewList"></div>
+      </section>
+      <section class="panel">
+        <div class="label">Add crew member</div>
+        <form class="addform" id="addCrew" autocomplete="off">
+          <input type="text" id="newName" placeholder="Name" maxlength="40" aria-label="Crew member name">
+          <input type="text" id="newRole" placeholder="Role (optional)" maxlength="40" aria-label="Crew member role">
+          <button class="btn primary" type="submit">Add to crew</button>
+        </form>
+      </section>
+      <section class="panel tools">
+        <div class="label">Data</div>
+        <button class="btn" data-action="load-example" id="exampleBtn" type="button">Load example crew</button>
+        <button class="btn" data-action="copy-csv" type="button">Copy all readings as CSV</button>
+        <textarea class="csv" id="csvBox" hidden readonly aria-label="CSV export"></textarea>
+        <button class="btn danger" data-action="clear-all" id="clearBtn" type="button">Clear all data</button>
+        <p class="note">Everything stays in this browser. Nothing is sent anywhere.</p>
+      </section>
+    </aside>
 
-    <!-- HEALTH INDICATORS SECTION -->
-    <p class="section-title">02 / HEALTH INDICATORS</p>
-    <h2 class="section-heading">Your body. At a glance.</h2>
-    
-    <main id="cards" class="cards-grid">
-      <!-- JavaScript will inject health cards here dynamically -->
+    <main>
+      <section class="card" id="sumWrap"></section>
+      <div class="work" id="work">
+        <div class="colA">
+          <section class="card" id="findWrap"></section>
+          <section class="card" id="metricWrap"></section>
+        </div>
+        <div class="colB"><section class="card form" id="formWrap"></section></div>
+      </div>
+      <section class="card" id="logWrap"></section>
     </main>
+  </div>
 
-    <!-- ADVISORIES & GUIDANCE -->
-    <p class="section-title">03 / ALERTS & GUIDANCE</p>
-    <h2 class="section-heading
+  <p class="disclaimer">AstroVitals is a hackathon prototype for decision support. Limits and thresholds are demo values, not validated medical criteria, and nothing here diagnoses or treats a condition. Follow mission medical protocols and contact the flight surgeon for any real concern.</p>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="script.js"></script>
+</body>
+</html>
